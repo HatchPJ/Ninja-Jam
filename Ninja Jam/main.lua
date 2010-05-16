@@ -83,7 +83,7 @@ function love.update(dt)
 		player.inair = 1
 	end
 
-	if love.keyboard.isDown("right") then
+	if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
 		bodies[1]:applyForce(200, 0)
 		if mvx >= 300 then
 			bodies[1]:setLinearVelocity(300, mvy)
@@ -91,7 +91,7 @@ function love.update(dt)
 		player.image = player.right_anim
 	end
 	
-	if love.keyboard.isDown("left") then
+	if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then
 		bodies[1]:applyForce(-200, 0)
 		if mvx <= -300 then
 			bodies[1]:setLinearVelocity(-300, mvy)
@@ -102,7 +102,7 @@ function love.update(dt)
 end
 
 function love.keypressed(k)
-	if k == " " and player.inair == 0 then
+	if k == " " or k == "w" or k == "up" and player.inair == 0 then
 		bodies[1]:applyImpulse(0, -40)
 	end
 end
