@@ -1,5 +1,6 @@
 SCREEN_WIDTH  = 800
 SCREEN_HEIGHT = 600
+require("lib/AnAL.lua")
 
 objects = {}
 
@@ -14,9 +15,18 @@ ground = { }
 	ground.y = SCREEN_HEIGHT - ground.image:getHeight()
 
 player = { }
-	player.image       = love.graphics.newImage("playerr.gif")
 	player.left_image  = love.graphics.newImage("playerl.gif")
 	player.right_image = love.graphics.newImage("playerr.gif")
+	
+	player.left_anim_image  = love.graphics.newImage("runl.gif")
+	player.right_anim_image = love.graphics.newImage("runr.gif")
+	player.stationary_left_anim  = newAnimation(player.left_image,  32, 32, 0.1, 0)
+	player.stationary_right_anim = newAnimation(player.right_image, 32, 32, 0.1, 0)
+	player.left_anim  = newAnimation(player.left_anim_image, 28, 28, 0.1, 0)
+	player.right_anim = newAnimation(player.right_anim_image, 28, 28, 0.1, 0)
+	
+	player.image = player.stationary_left_anim
+	
 	player.x = 2
 	player.y = SCREEN_HEIGHT - ground.image:getHeight() - player.image:getHeight()
 	player.move = {}
@@ -33,7 +43,7 @@ function love.load()
 	world:setGravity(0, 700)
 	world:setMeter(64)
 	
-	bodies = {} --create tables for the bodies and shapes so that the garbage collector doesn't delete them
+	bodies = {}
 	shapes = {}
 	
 	bodies[0] = love.physics.newBody(world, SCREEN_WIDTH/2, SCREEN_HEIGHT - 25, 0, 0)
@@ -46,11 +56,23 @@ function love.load()
 end
 
 function love.update(dt)
+	player.left_anim_image:setFilter("nearest", "nearest")
+	player.right_anim_image:setFilter("nearest", "nearest")
+	player.left_image:setFilter("nearest", "nearest")
+	player.right_image:setFilter("nearest", "nearest")
 	world:update(dt)
-	player.image:setFilter("nearest", "nearest")
-	mvx, mvy = bodies[1]:getLinearVelocity()
+	player.image:update(dt)
 	
+	mvx, mvy = bodies[1]:getLinearVelocity()
 	px, py = bodies[1]:getPosition()
+	
+	if mvx < 10 and mvx > -10 then
+		if player.image == player.left_anim then
+			player.image = player.stationary_left_anim
+		elseif player.image == player.right_anim then
+			player.image = player.stationary_right_anim
+		end
+	end
 	
 	gy = SCREEN_HEIGHT - 50
 	pyb = py + player.image:getHeight()/2
@@ -66,14 +88,15 @@ function love.update(dt)
 		if mvx >= 300 then
 			bodies[1]:setLinearVelocity(300, mvy)
 		end
-		player.image = player.right_image
+		player.image = player.right_anim
 	end
+	
 	if love.keyboard.isDown("left") then
 		bodies[1]:applyForce(-200, 0)
 		if mvx <= -300 then
 			bodies[1]:setLinearVelocity(-300, mvy)
 		end
-		player.image = player.left_image
+		player.image = player.left_anim
 	end
 	
 end
@@ -87,14 +110,14 @@ end
 function love.draw()
 	love.graphics.draw(background.image, background.x, background.y)
 	
-	local x1, y1, x2, y2, x3, y3, x4, y4 = shapes[0]:getBoundingBox() --get the x,y coordinates of all 4 corners of the box.
-	local boxwidth = x3 - x2 --calculate the width of the box
-	local boxheight = y2 - y1 --calculate the height of the box
+	local x1, y1, x2, y2, x3, y3, x4, y4 = shapes[0]:getBoundingBox()
+	local boxwidth = x3 - x2
+	local boxheight = y2 - y1
 	love.graphics.setColor(72, 160, 14)
 	love.graphics.rectangle("fill", bodies[0]:getX()  - boxwidth/2, bodies[0]:getY() - boxheight/2, boxwidth, boxheight)
 	love.graphics.setColor(255, 255, 255)
 	
-	love.graphics.draw(player.image, bodies[1]:getX(), bodies[1]:getY())
+	player.image:draw(bodies[1]:getX(), bodies[1]:getY())
 	
 	printx, printy = bodies[1]:getLinearVelocity()
 	love.graphics.print(printx, 20, 40)
