@@ -5,21 +5,21 @@ require("lib/AnAL.lua")
 objects = {}
 
 background = { }
-	background.image = love.graphics.newImage("bg.gif")
+	background.image = love.graphics.newImage("images/bg.gif")
 	background.x = 0
 	background.y = 0
 
 ground = { }
-	ground.image = love.graphics.newImage("ground.gif")
+	ground.image = love.graphics.newImage("images/ground.gif")
 	ground.x = 0
 	ground.y = SCREEN_HEIGHT - ground.image:getHeight()
 
 player = { }
-	player.left_image  = love.graphics.newImage("playerl.gif")
-	player.right_image = love.graphics.newImage("playerr.gif")
+	player.left_image  = love.graphics.newImage("images/player/playerl.gif")
+	player.right_image = love.graphics.newImage("images/player/playerr.gif")
 	
-	player.left_anim_image  = love.graphics.newImage("runl.gif")
-	player.right_anim_image = love.graphics.newImage("runr.gif")
+	player.left_anim_image  = love.graphics.newImage("images/player/runl.gif")
+	player.right_anim_image = love.graphics.newImage("images/player/runr.gif")
 	player.stationary_left_anim  = newAnimation(player.left_image,  32, 32, 0.1, 0)
 	player.stationary_right_anim = newAnimation(player.right_image, 32, 32, 0.1, 0)
 	player.left_anim  = newAnimation(player.left_anim_image, 28, 28, 0.1, 0)
