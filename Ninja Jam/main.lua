@@ -1,5 +1,5 @@
-SCREEN_WIDTH  = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH  = 640
+SCREEN_HEIGHT = 480
 require("lib/AnAL.lua")
 
 objects = {}
@@ -15,17 +15,18 @@ ground = { }
 	ground.y = SCREEN_HEIGHT - ground.image:getHeight()
 
 player = { }
+
 	player.left_image  = love.graphics.newImage("images/player/playerl.gif")
 	player.right_image = love.graphics.newImage("images/player/playerr.gif")
 	
 	player.left_anim_image  = love.graphics.newImage("images/player/runl.gif")
 	player.right_anim_image = love.graphics.newImage("images/player/runr.gif")
-	player.stationary_left_anim  = newAnimation(player.left_image,  32, 32, 0.1, 0)
-	player.stationary_right_anim = newAnimation(player.right_image, 32, 32, 0.1, 0)
-	player.left_anim  = newAnimation(player.left_anim_image, 28, 28, 0.1, 0)
-	player.right_anim = newAnimation(player.right_anim_image, 28, 28, 0.1, 0)
+	player.stationary_left_anim  = newAnimation(player.left_image,  19, 23, 0.1, 0)
+	player.stationary_right_anim = newAnimation(player.right_image, 19, 23, 0.1, 0)
+	player.left_anim  = newAnimation(player.left_anim_image, 19, 23, 0.1, 0)
+	player.right_anim = newAnimation(player.right_anim_image, 19, 23, 0.1, 0)
 	
-	player.image = player.stationary_left_anim
+	player.image = player.stationary_right_anim
 	
 	player.x = 2
 	player.y = SCREEN_HEIGHT - ground.image:getHeight() - player.image:getHeight()
@@ -34,7 +35,7 @@ player = { }
 	player.move.y = 0
 	player.speed = 300
 	player.grav = 0
-	player.inair = 0
+	player.inair = false
 
 grav = 200
 
@@ -52,6 +53,9 @@ function love.load()
 	bodies[1] = love.physics.newBody(world, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 5, 0)
 	shapes[1] = love.physics.newRectangleShape(bodies[1], 0, 0, player.image:getHeight(), player.image:getWidth(), 0)
 	
+	bodies[2] = love.physics.newBody(world, SCREEN_WIDTH/2 + 50, SCREEN_HEIGHT/2, 5, 0)
+	shapes[2] = love.physics.newRectangleShape(bodies[2], 0, 0, 50, 50, 0)
+	
 	love.graphics.setMode( SCREEN_WIDTH, SCREEN_HEIGHT, false, true, 0 )
 end
 
@@ -63,10 +67,10 @@ function love.update(dt)
 	world:update(dt)
 	player.image:update(dt)
 	
-	mvx, mvy = bodies[1]:getLinearVelocity()
-	px, py = bodies[1]:getPosition()
+	player.move.x, player.move.y = bodies[1]:getLinearVelocity()
+	player.x, player.y = bodies[1]:getPosition()
 	
-	if mvx < 10 and mvx > -10 then
+	if player.move.x < 10 and player.move.x > -10 then
 		if player.image == player.left_anim then
 			player.image = player.stationary_left_anim
 		elseif player.image == player.right_anim then
@@ -74,31 +78,35 @@ function love.update(dt)
 		end
 	end
 	
-	gy = SCREEN_HEIGHT - 50
-	pyb = py + player.image:getHeight()/2
-	
-	if pyb < gy + 3 and pyb > gy - 3 then
-		player.inair = 0
+	if player.y + player.image:getHeight()/2 < ground.y + 3 and player.y + player.image:getHeight()/2 > ground.y - 3 then
+		player.inair = false
 	else
-		player.inair = 1
+		player.inair = true
 	end
 
 	if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
-		bodies[1]:applyForce(200, 0)
-		if mvx >= 300 then
-			bodies[1]:setLinearVelocity(300, mvy)
+		if player.inair == false then
+			bodies[1]:applyForce(200, 0)
+		elseif player.inair == true then
+			bodies[1]:applyForce(100, 0)
+		end
+		if player.move.x >= 300 then
+			bodies[1]:setLinearVelocity(300, player.move.y)
 		end
 		player.image = player.right_anim
 	end
 	
 	if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then
-		bodies[1]:applyForce(-200, 0)
-		if mvx <= -300 then
-			bodies[1]:setLinearVelocity(-300, mvy)
+		if player.inair == false then
+			bodies[1]:applyForce(-200, 0)
+		elseif player.inair == true then
+			bodies[1]:applyForce(-100, 0)
+		end
+		if player.move.x <= -300 then
+			bodies[1]:setLinearVelocity(-300, player.move.y)
 		end
 		player.image = player.left_anim
 	end
-	
 end
 
 function love.keypressed(k)
@@ -115,15 +123,22 @@ function love.draw()
 	local boxheight = y2 - y1
 	love.graphics.setColor(72, 160, 14)
 	love.graphics.rectangle("fill", bodies[0]:getX()  - boxwidth/2, bodies[0]:getY() - boxheight/2, boxwidth, boxheight)
+	
+	local xb1, yb1, xb2, yb2, xb3, yb3, xb4, yb4 = shapes[2]:getBoundingBox()
+	local boxbwidth = xb3 - xb2
+	local boxbheight = yb2 - yb1
+	love.graphics.setColor(255, 0, 0)
+	love.graphics.rectangle("fill", bodies[2]:getX()  - boxbwidth/2, bodies[2]:getY() - boxbheight/2, boxbwidth, boxbheight)
+	
 	love.graphics.setColor(255, 255, 255)
 	
-	player.image:draw(bodies[1]:getX(), bodies[1]:getY())
+	player.image:draw(bodies[1]:getX(), bodies[1]:getY(), 0, 1, 1, 9.5, 13)
 	
 	printx, printy = bodies[1]:getLinearVelocity()
 	love.graphics.print(printx, 20, 40)
 	love.graphics.print(printy, 20, 55)
-	love.graphics.print(gy, 20, 70)
-	love.graphics.print(pyb, 20, 85)
-	love.graphics.print(love.mouse.getY(), 20, 100)
-	love.graphics.print(player.inair, 20, 115)
+	love.graphics.print(ground.y, 20, 70)
+	love.graphics.print(player.y + player.image:getHeight()/2, 20, 85)
+	love.graphics.print(player.image:getWidth(), 20, 100)
+	love.graphics.print(player.image:getHeight(), 20, 115)
 end
