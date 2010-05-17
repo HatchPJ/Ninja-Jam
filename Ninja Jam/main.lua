@@ -10,9 +10,8 @@ background = { }
 	background.y = 0
 
 ground = { }
-	ground.image = love.graphics.newImage("images/ground.gif")
 	ground.x = 0
-	ground.y = SCREEN_HEIGHT - ground.image:getHeight()
+	ground.y = SCREEN_HEIGHT - 50
 
 player = { }
 
