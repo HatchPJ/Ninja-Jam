@@ -33,7 +33,8 @@ player = { }
 	player.move = {}
 	player.move.x = 0
 	player.move.y = 0
-	player.speed = 300
+	player.speed = 200
+	player.jump = 30
 	player.grav = 0
 	player.inair = false
 
@@ -86,24 +87,24 @@ function love.update(dt)
 
 	if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
 		if player.inair == false then
-			bodies[1]:applyForce(200, 0)
+			bodies[1]:applyForce(player.speed, 0)
 		elseif player.inair == true then
-			bodies[1]:applyForce(100, 0)
+			bodies[1]:applyForce(player.speed/3, 0)
 		end
-		if player.move.x >= 300 then
-			bodies[1]:setLinearVelocity(300, player.move.y)
+		if player.move.x >= player.speed then
+			bodies[1]:setLinearVelocity(player.speed, player.move.y)
 		end
 		player.image = player.right_anim
 	end
 	
 	if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then
 		if player.inair == false then
-			bodies[1]:applyForce(-200, 0)
+			bodies[1]:applyForce(-player.speed, 0)
 		elseif player.inair == true then
-			bodies[1]:applyForce(-100, 0)
+			bodies[1]:applyForce(-player.speed/3, 0)
 		end
-		if player.move.x <= -300 then
-			bodies[1]:setLinearVelocity(-300, player.move.y)
+		if player.move.x <= -player.speed then
+			bodies[1]:setLinearVelocity(-player.speed, player.move.y)
 		end
 		player.image = player.left_anim
 	end
@@ -111,7 +112,7 @@ end
 
 function love.keypressed(k)
 	if k == " " or k == "w" or k == "up" and player.inair == 0 then
-		bodies[1]:applyImpulse(0, -40)
+		bodies[1]:applyImpulse(0, -player.jump)
 	end
 end
 
