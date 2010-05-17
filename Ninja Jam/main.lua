@@ -28,7 +28,7 @@ player = { }
 	player.image = player.stationary_right_anim
 	
 	player.x = 2
-	player.y = SCREEN_HEIGHT - ground.image:getHeight() - player.image:getHeight()
+	player.y = SCREEN_HEIGHT/2
 	player.move = {}
 	player.move.x = 0
 	player.move.y = 0
