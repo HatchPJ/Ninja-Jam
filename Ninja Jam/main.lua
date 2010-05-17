@@ -20,10 +20,10 @@ player = { }
 	
 	player.left_anim_image  = love.graphics.newImage("images/player/runl.gif")
 	player.right_anim_image = love.graphics.newImage("images/player/runr.gif")
-	player.stationary_left_anim  = newAnimation(player.left_image,  19, 23, 0.1, 0)
-	player.stationary_right_anim = newAnimation(player.right_image, 19, 23, 0.1, 0)
-	player.left_anim  = newAnimation(player.left_anim_image, 19, 23, 0.1, 0)
-	player.right_anim = newAnimation(player.right_anim_image, 19, 23, 0.1, 0)
+	player.stationary_left_anim  = newAnimation(player.left_image,  32, 32, 0.1, 0)
+	player.stationary_right_anim = newAnimation(player.right_image, 32, 32, 0.1, 0)
+	player.left_anim  = newAnimation(player.left_anim_image, 32, 32, 0.1, 0)
+	player.right_anim = newAnimation(player.right_anim_image, 32, 32, 0.1, 0)
 	
 	player.image = player.stationary_right_anim
 	
