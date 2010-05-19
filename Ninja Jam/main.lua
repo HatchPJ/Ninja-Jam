@@ -110,7 +110,7 @@ function love.update(dt)
 end
 
 function love.keypressed(k)
-	if k == " " or k == "w" or k == "up" and player.inair == 0 then
+	if (k == " " or k == "w" or k == "up") and not player.inair then
 		bodies[1]:applyImpulse(0, -player.jump)
 	end
 end
