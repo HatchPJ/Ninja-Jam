@@ -1,6 +1,7 @@
 SCREEN_WIDTH  = 640
 SCREEN_HEIGHT = 480
 require("lib/AnAL.lua")
+require("player.lua")
 
 tile = {}
 for i=0,2 do -- change 3 to the number of tile images minus 1.
@@ -72,8 +73,6 @@ function draw_map()
 	end
 end
 
-objects = {}
-
 background = { }
 	background.image = love.graphics.newImage("images/bg.gif")
 	background.x = 0
@@ -82,30 +81,6 @@ background = { }
 ground = { }
 	ground.x = 0
 	ground.y = SCREEN_HEIGHT - 50
-
-player = { }
-
-	player.left_image  = love.graphics.newImage("images/player/playerl.gif")
-	player.right_image = love.graphics.newImage("images/player/playerr.gif")
-	
-	player.left_anim_image  = love.graphics.newImage("images/player/runl.gif")
-	player.right_anim_image = love.graphics.newImage("images/player/runr.gif")
-	player.stationary_left_anim  = newAnimation(player.left_image,  32, 32, 0.1, 0)
-	player.stationary_right_anim = newAnimation(player.right_image, 32, 32, 0.1, 0)
-	player.left_anim  = newAnimation(player.left_anim_image, 32, 32, 0.1, 0)
-	player.right_anim = newAnimation(player.right_anim_image, 32, 32, 0.1, 0)
-	
-	player.image = player.stationary_right_anim
-	
-	player.x = 2
-	player.y = SCREEN_HEIGHT/2
-	player.move = {}
-	player.move.x = 0
-	player.move.y = 0
-	player.speed = 200
-	player.jump = 30
-	player.grav = 0
-	player.inair = false
 
 grav = 200
 
