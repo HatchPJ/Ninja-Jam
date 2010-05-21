@@ -4,13 +4,20 @@ Map.height = nil
 Map.layers = nil
 Map.tiles  = nil
 
-function Map:new(width, height)
+function Map:new(data, z)
 	map = {}
 	setmetatable(map, self)
 	self.__index = self
 	
-	map.width  = width
-	map.height = height
+	if not z then
+		table.insert(self.layers, data)
+	else
+		self.layers[z] = data
+	end
+	
+	-- map.width is set to the width of the first row.
+	map.width  = #data[1]
+	map.height = #data
 	
 	return map
 end
