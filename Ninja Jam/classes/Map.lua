@@ -9,10 +9,11 @@ function Map:new(data, z)
 	setmetatable(map, self)
 	self.__index = self
 	
+	map.layers = { }
 	if not z then
-		table.insert(self.layers, data)
+		table.insert(map.layers, data)
 	else
-		self.layers[z] = data
+		map.layers[z] = data
 	end
 	
 	-- map.width is set to the width of the first row.
@@ -56,5 +57,5 @@ function Map:getTiles()
 	return self.tiles
 end
 function Map:getLayer(z)
-	return self.layer[z]
+	return self.layers[z]
 end
