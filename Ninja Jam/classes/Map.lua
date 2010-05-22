@@ -39,8 +39,8 @@ function Map:new(tile_w, tile_h, data, z)
 	for i = 1, (map.height * map.width - 1) do
 		local x = (i % map.width) + 1
 		local y = math.floor((i / map.width) + 1)
-		if layer[y][x] ~= 0 then
-			local tile = Tile:new("images/tile" .. layer[y][x] .. ".gif")
+		if data[y][x] ~= 0 then
+			local tile = Tile:new("images/tiles/tile" .. data[y][x] .. ".gif")
 			tile:create(map.world, (x-1) * tile:getWidth(), (y-1) * tile:getHeight())
 			table.insert(map.tiles, tile)
 		end
