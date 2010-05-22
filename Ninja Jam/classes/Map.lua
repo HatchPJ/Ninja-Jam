@@ -9,7 +9,7 @@ Map.layers = { }
 Map.tiles  = { }
 Map.world  = nil
 
-function Map:new(tile_w, tile_h, data, z)
+function Map:new(tile_w, tile_h, layers)
 	map = {}
 	setmetatable(map, self)
 	self.__index = self
@@ -19,15 +19,12 @@ function Map:new(tile_w, tile_h, data, z)
 	map.tile_h = tile_h
 	
 	-- set map data
-	if not z then
-		table.insert(map.layers, data)
-	else
-		map.layers[z] = data
-	end
+	map.layers = layers
 	
-	-- map.width is set to the width of the first row.
-	map.width  = #data[1]
-	map.height = #data
+	-- map.width is set to the width of the first row of the first
+	-- layer. map.height is from first layer as well. Be consistent.
+	map.width  = #map.layers[1][1]
+	map.height = #map.layers[1]
 	
 	-- setup the world
 	map.world = love.physics.newWorld(map.width  * map.tile_w,
@@ -36,13 +33,16 @@ function Map:new(tile_w, tile_h, data, z)
 	map.world:setMeter(64)
 	
 	-- create the map objects in the world
-	for i = 1, (map.height * map.width - 1) do
-		local x = (i % map.width) + 1
-		local y = math.floor((i / map.width) + 1)
-		if data[y][x] ~= 0 then
-			local tile = Tile:new("images/tiles/tile" .. data[y][x] .. ".gif")
-			tile:create(map.world, (x-1) * tile:getWidth(), (y-1) * tile:getHeight())
-			table.insert(map.tiles, tile)
+	for i, layer in ipairs(map.layers) do
+		map.tiles[i] = { }
+		for j = 1, (map.height * map.width - 1) do
+			local x = (j % map.width) + 1
+			local y = math.floor((j / map.width) + 1)
+			if layer[y][x] ~= 0 then
+				local tile = Tile:new("images/tiles/tile" .. layer[y][x] .. ".gif")
+				tile:create(map.world, (x-1) * tile:getWidth(), (y-1) * tile:getHeight())
+				table.insert(map.tiles[i], tile)
+			end
 		end
 	end
 	
@@ -50,21 +50,13 @@ function Map:new(tile_w, tile_h, data, z)
 end
 
 function Map:draw(x, y)
-	for i, v in ipairs(map.tiles) do
-		v:draw(x, y)
+	if not x then x = 0 end
+	if not y then y = 0 end
+	for i = 1, #self.tiles do
+		for j = 1, #self.tiles[i] do
+			self.tiles[i][j]:draw(x, y)
+		end
 	end
-end
-
-function Map:addLayer(data, z)
-	if not z then
-		table.insert(self.layers, data)
-	else
-		self.layers[z] = data
-	end
-end
-
-function Map.deleteLayer(z)
-	
 end
 
 --setters and getters
