@@ -61,6 +61,9 @@ function love.keypressed(k)
 end
 
 function love.draw()
-	map:draw()
+	map:draw(0, 0, 1)
 	player.image:draw(bodies[1]:getX(), bodies[1]:getY(), 0, 1, 1, 9.5, 13)
+	map:draw(0, 0, 2)
+	
+	love.graphics.setBackgroundColor(80,120,200)
 end

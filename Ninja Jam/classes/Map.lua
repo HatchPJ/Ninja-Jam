@@ -24,7 +24,7 @@ function Map:new(tile_w, tile_h, layers)
 	-- map.width is set to the width of the first row of the first
 	-- layer. map.height is from first layer as well. Be consistent.
 	map.width  = #map.layers[1][1]
-	map.height = #map.layers[1] - 1
+	map.height = #map.layers[1]
 	
 	-- setup the world
 	map.world = love.physics.newWorld(map.width  * map.tile_w,
@@ -53,12 +53,22 @@ function Map:new(tile_w, tile_h, layers)
 	return map
 end
 
-function Map:draw(x, y)
+function Map:draw(x, y, ...)
 	if not x then x = 0 end
 	if not y then y = 0 end
-	for i = 1, #self.tiles do
-		for j = 1, #self.tiles[i] do
-			self.tiles[i][j]:draw(x, y)
+	
+	if arg.n == 0 then -- draw all layers
+		for i = 1, #self.tiles do
+			for j = 1, #self.tiles[i] do
+				self.tiles[i][j]:draw(x, y)
+			end
+		end
+
+	else -- draw only the layers specified
+		for i,v in ipairs(arg) do
+			for j = 1, #self.tiles[v] do
+				self.tiles[v][j]:draw(x, y)
+			end
 		end
 	end
 end
