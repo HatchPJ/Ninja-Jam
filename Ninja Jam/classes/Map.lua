@@ -1,15 +1,24 @@
+require("classes/Tile.lua")
+
 Map = { }
 Map.width  = nil
 Map.height = nil
-Map.layers = nil
-Map.tiles  = nil
+Map.tile_w = nil
+Map.tile_h = nil
+Map.layers = { }
+Map.tiles  = { }
+Map.world  = nil
 
-function Map:new(data, z)
+function Map:new(tile_w, tile_h, data, z)
 	map = {}
 	setmetatable(map, self)
 	self.__index = self
 	
-	map.layers = { }
+	-- set tile size
+	map.tile_w = tile_w
+	map.tile_h = tile_h
+	
+	-- set map data
 	if not z then
 		table.insert(map.layers, data)
 	else
@@ -20,11 +29,33 @@ function Map:new(data, z)
 	map.width  = #data[1]
 	map.height = #data
 	
+	-- setup the world
+	map.world = love.physics.newWorld(map.width  * map.tile_w,
+	                                  map.height * map.tile_h)
+	map.world:setGravity(0, 700)
+	map.world:setMeter(64)
+	
+	-- create the map objects in the world
+	for i = 1, (map.height * map.width - 1) do
+		local x = (i % map.width) + 1
+		local y = math.floor((i / map.width) + 1)
+		if layer[y][x] ~= 0 then
+			local tile = Tile:new("images/tile" .. layer[y][x] .. ".gif")
+			tile:create(map.world, (x-1) * tile:getWidth(), (y-1) * tile:getHeight())
+			table.insert(map.tiles, tile)
+		end
+	end
+	
 	return map
 end
 
--- a layer should be a 2-dimensional array of Tile objects
-function Map.addLayer(data, z)
+function Map:draw(x, y)
+	for i, v in ipairs(map.tiles) do
+		v:draw(x, y)
+	end
+end
+
+function Map:addLayer(data, z)
 	if not z then
 		table.insert(self.layers, data)
 	else

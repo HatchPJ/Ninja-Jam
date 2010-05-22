@@ -37,8 +37,10 @@ function Tile:create(world, x, y)
 	                                          unpack(self.geometry))
 end
 
-function Tile:draw()
-	love.graphics.draw(self.image, self.x, self.y)
+function Tile:draw(x, y)
+	if not x then x = 0 end
+	if not y then y = 0 end
+	love.graphics.draw(self.image, self.x + x, self.y + y)
 end
 
 --setters and getters
