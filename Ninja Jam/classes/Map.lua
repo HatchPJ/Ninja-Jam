@@ -24,7 +24,7 @@ function Map:new(tile_w, tile_h, layers)
 	-- map.width is set to the width of the first row of the first
 	-- layer. map.height is from first layer as well. Be consistent.
 	map.width  = #map.layers[1][1]
-	map.height = #map.layers[1]
+	map.height = #map.layers[1] - 1
 	
 	-- setup the world
 	map.world = love.physics.newWorld(map.width  * map.tile_w,
@@ -40,7 +40,11 @@ function Map:new(tile_w, tile_h, layers)
 			local y = math.floor((j / map.width) + 1)
 			if layer[y][x] ~= 0 then
 				local tile = Tile:new("images/tiles/tile" .. layer[y][x] .. ".gif")
-				tile:create(map.world, (x-1) * tile:getWidth(), (y-1) * tile:getHeight())
+				if map.layers[i].collision then
+					tile:create((x-1) * tile:getWidth(), (y-1) * tile:getHeight(), map.world)
+				else
+					tile:create((x-1) * tile:getWidth(), (y-1) * tile:getHeight())
+				end
 				table.insert(map.tiles[i], tile)
 			end
 		end

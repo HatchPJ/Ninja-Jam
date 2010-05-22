@@ -29,12 +29,14 @@ function Tile:new(file)
 	return tile
 end
 
-function Tile:create(world, x, y)
+function Tile:create(x, y, world)
 	self.x = x
 	self.y = y
-	self.body  = love.physics.newBody(world, self.x, self.y)
-	self.shape = love.physics.newPolygonShape(self.body,
-	                                          unpack(self.geometry))
+	if world then
+		self.body  = love.physics.newBody(world, self.x, self.y)
+		self.shape = love.physics.newPolygonShape(self.body,
+	                                              unpack(self.geometry))
+	end
 end
 
 function Tile:draw(x, y)
