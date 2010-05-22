@@ -9,7 +9,7 @@ SCREEN_HEIGHT = 480
 
 love.graphics.setMode(SCREEN_WIDTH, SCREEN_HEIGHT, false, true, 0)
 
-map = Map:new(16, 16, layer)
+map = Map:new(16, 16, layers[1])
 
 bodies = {love.physics.newBody(map.world, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 5, 0)}
 shapes = {love.physics.newRectangleShape(bodies[1], 0, 0, player.image:getHeight(), player.image:getWidth(), 0)}
