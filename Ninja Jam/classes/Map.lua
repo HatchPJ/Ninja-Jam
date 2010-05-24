@@ -53,22 +53,24 @@ function Map:new(tile_w, tile_h, layers)
 	return map
 end
 
-function Map:draw(x, y, ...)
-	if not x then x = 0 end
-	if not y then y = 0 end
+function Map:draw(x, y, angle, sx, sy, ox, oy, ...)
+	local layers
+	local layer
 	
-	if arg.n == 0 then -- draw all layers
-		for i = 1, #self.tiles do
-			for j = 1, #self.tiles[i] do
-				self.tiles[i][j]:draw(x, y)
-			end
+	if arg.n ~= 0 then
+		layers = #arg
+	else
+		layers = #self.tiles
+	end
+	
+	for i = 1, layers do
+		if arg.n ~= 0 then
+			layer = arg[i]
+		else
+			layer = i
 		end
-
-	else -- draw only the layers specified
-		for i,v in ipairs(arg) do
-			for j = 1, #self.tiles[v] do
-				self.tiles[v][j]:draw(x, y)
-			end
+		for tile = 1, #self.tiles[layer] do
+			self.tiles[layer][tile]:draw(x, y, angle, sx, sy, ox, oy)
 		end
 	end
 end

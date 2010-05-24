@@ -39,10 +39,8 @@ function Tile:create(x, y, world)
 	end
 end
 
-function Tile:draw(x, y)
-	if not x then x = 0 end
-	if not y then y = 0 end
-	love.graphics.draw(self.image, self.x + x, self.y + y)
+function Tile:draw(x, y, angle, sx, sy, ox, oy)
+	love.graphics.draw(self.image, self.x + x, self.y + y, angle, sx, sy, ox, oy)
 end
 
 --setters and getters
