@@ -4,7 +4,8 @@ require("classes/Map.lua")
 require("player.lua")
 require("maps/map1.lua")
 
-SCALE = 2
+SCALE_X = 2
+SCALE_Y = 2
 SCREEN_WIDTH  = 640
 SCREEN_HEIGHT = 480
 
@@ -12,7 +13,7 @@ love.graphics.setMode(SCREEN_WIDTH, SCREEN_HEIGHT, false, true, 0)
 
 map = Map:new(8, 8, layers)
 
-bodies = {love.physics.newBody(map.world, SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 5, 0)}
+bodies = {love.physics.newBody(map.world, 0, 0, 5, 0)}
 shapes = {love.physics.newRectangleShape(bodies[1], 0, 0, player.image:getHeight(), player.image:getWidth(), 0)}
 
 function love.update(dt)
@@ -42,6 +43,16 @@ function love.update(dt)
 		player.image = player.right_anim
 	end
 	
+	if love.keyboard.isDown("z") then
+		SCALE_X = SCALE_X + .01
+		SCALE_Y = SCALE_Y + .01
+	end
+	
+	if love.keyboard.isDown("x") then
+		SCALE_X = SCALE_X - .01
+		SCALE_Y = SCALE_Y - .01
+	end
+	
 	if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then
 		if player.inair == false then
 			bodies[1]:applyForce(-player.speed, 0)
@@ -62,8 +73,8 @@ function love.keypressed(k)
 end
 
 function love.draw()
-	player.image:draw(bodies[1]:getX(), bodies[1]:getY(), 0, 1, 1, 9.5, 13)
-	map:draw(0, 0, 0, 1, 1, 0, 0)
+	player.image:draw(bodies[1]:getX() * SCALE_X, bodies[1]:getY() * SCALE_Y, 0, SCALE_X, SCALE_Y, 9.5, 13)
+	map:draw(0, 0, 0, SCALE_X, SCALE_Y, 0, 0)
 	
 	love.graphics.setBackgroundColor(80,120,200)
 end

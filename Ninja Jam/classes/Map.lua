@@ -69,8 +69,8 @@ function Map:draw(x, y, angle, sx, sy, ox, oy, ...)
 		else
 			layer = i
 		end
-		for tile = 1, #self.tiles[layer] do
-			self.tiles[layer][tile]:draw(x, y, angle, sx, sy, ox, oy)
+		for i, tile in ipairs(self.tiles[layer]) do
+			tile:draw(tile:getX() * sx, tile:getY() * sy, angle, sx, sy, ox, oy)
 		end
 	end
 end

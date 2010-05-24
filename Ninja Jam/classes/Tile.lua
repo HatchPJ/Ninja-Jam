@@ -40,7 +40,7 @@ function Tile:create(x, y, world)
 end
 
 function Tile:draw(x, y, angle, sx, sy, ox, oy)
-	love.graphics.draw(self.image, self.x + x, self.y + y, angle, sx, sy, ox, oy)
+	love.graphics.draw(self.image, x, y, angle, sx, sy, ox, oy)
 end
 
 --setters and getters
