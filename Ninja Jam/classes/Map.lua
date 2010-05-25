@@ -70,7 +70,7 @@ function Map:draw(x, y, angle, sx, sy, ox, oy, ...)
 			layer = i
 		end
 		for i, tile in ipairs(self.tiles[layer]) do
-			tile:draw(tile:getX() * sx, tile:getY() * sy, angle, sx, sy, ox, oy)
+			tile:draw((tile:getX() * sx) + x, (tile:getY() * sy) + y, angle, sx, sy, ox, oy)
 		end
 	end
 end
