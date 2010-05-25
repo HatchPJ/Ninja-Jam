@@ -1,15 +1,15 @@
 Tile = {}
-Tile.world      = nil
-Tile.width      = nil
-Tile.height     = nil
-Tile.image      = nil
-Tile.body       = nil
-Tile.shape      = nil
-Tile.geometry   = nil
-Tile.x          = nil
-Tile.y          = nil
+Tile.world    = nil
+Tile.width    = nil
+Tile.height   = nil
+Tile.image    = nil
+Tile.body     = nil
+Tile.shape    = nil
+Tile.geometry = nil
+Tile.x        = nil
+Tile.y        = nil
 
-function Tile:new(file)
+function Tile:new(file, width, height)
 	tile = {}
 	setmetatable(tile, self)
 	self.__index = self
@@ -17,8 +17,8 @@ function Tile:new(file)
 	tile.image = love.graphics.newImage(file)
 	tile.image:setFilter("nearest","nearest")
 	
-	tile.width  = tile.image:getWidth()
-	tile.height = tile.image:getHeight()
+	tile.width  = width  or tile.image:getWidth()
+	tile.height = height or tile.image:getHeight()
 	
 	tile.geometry = { -- defines a rectangle by default
 		-(tile.width/2), -(tile.height/2),
@@ -44,12 +44,6 @@ function Tile:draw(x, y, angle, sx, sy, ox, oy)
 end
 
 --setters and getters
-function Tile:setWidth(v)
-	self.width = v
-end
-function Tile:setHeight(v)
-	self.height = v
-end
 function Tile:setGeometry(...)
 	self.geometry = arg
 end

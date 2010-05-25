@@ -5,7 +5,7 @@ Camera.scale_x  = nil
 Camera.scale_y  = nil
 Camera.rotation = nil
 
-function Camera:new(x, y, sx, sy, r)
+function Camera:new(x, y, r, sx, sy)
 	camera = {}
 	setmetatable(camera, self)
 	

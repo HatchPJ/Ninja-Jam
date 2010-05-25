@@ -11,7 +11,7 @@ SCREEN_HEIGHT = 480
 love.graphics.setMode(SCREEN_WIDTH, SCREEN_HEIGHT, false, true, 0)
 
 map = Map:new(8, 8, layers)
-camera = Camera:new(0, 0, 2, 2, 0)
+camera = Camera:new(0, 0, 0, 2, 2)
 
 
 bodies = {love.physics.newBody(map.world, 0, 0, 5, 0)}
@@ -24,7 +24,7 @@ function love.update(dt)
 	player.move.x, player.move.y = bodies[1]:getLinearVelocity()
 	player.x, player.y = bodies[1]:getPosition()
 	
-	camera:setX(-(bodies[1]:getX() * camera:getScaleX())+ SCREEN_WIDTH/2)
+	camera:setX(-(bodies[1]:getX() * camera:getScaleX()) + SCREEN_WIDTH/2)
 	camera:setY(-(bodies[1]:getY() * camera:getScaleY()) + SCREEN_HEIGHT/2)
 	
 	if player.move.x < 10 and player.move.x > -10 then
@@ -47,16 +47,6 @@ function love.update(dt)
 		player.image = player.right_anim
 	end
 	
-	if love.keyboard.isDown("z") then
-		camera:setScaleX(camera:getScaleX() + .01)
-		camera:setScaleY(camera:getScaleY() + .01)
-	end
-	
-	if love.keyboard.isDown("x") then
-		camera:setScaleX(camera:getScaleX() - .01)
-		camera:setScaleY(camera:getScaleY() - .01)
-	end
-	
 	if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then
 		if player.inair == false then
 			bodies[1]:applyForce(-player.speed, 0)
@@ -67,6 +57,16 @@ function love.update(dt)
 			bodies[1]:setLinearVelocity(-player.speed, player.move.y)
 		end
 		player.image = player.left_anim
+	end
+	
+	if love.keyboard.isDown("z") then
+		camera:setScaleX(camera:getScaleX() + .01)
+		camera:setScaleY(camera:getScaleY() + .01)
+	end
+	
+	if love.keyboard.isDown("x") then
+		camera:setScaleX(camera:getScaleX() - .01)
+		camera:setScaleY(camera:getScaleY() - .01)
 	end
 end
 

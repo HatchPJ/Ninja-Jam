@@ -70,22 +70,20 @@ function Map:draw(x, y, angle, sx, sy, ox, oy, ...)
 			layer = i
 		end
 		for i, tile in ipairs(self.tiles[layer]) do
-			tile:draw((tile:getX() * sx) + x, (tile:getY() * sy) + y, angle, sx, sy, ox, oy)
+			tile:draw((tile:getX() * sx) + x,
+			          (tile:getY() * sy) + y,
+			          angle, sx, sy, ox, oy)
 		end
 	end
 end
 
---setters and getters
-function Map:setWidth(v)
-	self.width = v
+--getters; nothing to set, really
+function Map:getTileWidth()
+	return self.tile_w
 end
-function Map:setHeight(v)
-	self.height = v
+function Map:getTileHeight()
+	return self.tile_h
 end
-function Map:setTiles(tiles)
-	self.tiles = tiles
-end
-
 function Map:getWidth()
 	return self.width
 end
@@ -97,4 +95,7 @@ function Map:getTiles()
 end
 function Map:getLayer(z)
 	return self.layers[z]
+end
+function Map:getWorld()
+	return self.world
 end
