@@ -24,8 +24,16 @@ function love.update(dt)
 	player.move.x, player.move.y = bodies[1]:getLinearVelocity()
 	player.x, player.y = bodies[1]:getPosition()
 	
-	camera:setX(-(bodies[1]:getX() * camera:getScaleX()) + SCREEN_WIDTH/2)
-	camera:setY(-(bodies[1]:getY() * camera:getScaleY()) + SCREEN_HEIGHT/2)
+	camerax = -( (player.x * math.cos(camera:getRotation())) -
+				(player.y * math.sin(camera:getRotation())) )
+	cameray = -( (player.x * math.sin(camera:getRotation())) +
+				(player.y * math.cos(camera:getRotation())) )
+	
+	camerax = camerax * camera:getScaleX()
+	cameray = cameray * camera:getScaleY()
+
+	camera:setX(camerax + SCREEN_WIDTH/2)
+	camera:setY(cameray + SCREEN_HEIGHT/2)
 	
 	if player.move.x < 10 and player.move.x > -10 then
 		if player.image == player.left_anim then
