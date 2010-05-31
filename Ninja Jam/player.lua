@@ -13,6 +13,8 @@ player.image = player.stationary_right_anim
 
 player.x = 0
 player.y = 0
+player.width = 13
+player.height = 19
 player.move = {}
 player.move.x = 0
 player.move.y = 0

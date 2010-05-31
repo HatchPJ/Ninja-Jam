@@ -15,11 +15,12 @@ camera = Camera:new(0, 0, 0, 1, 1)
 
 
 bodies = {love.physics.newBody(map.world, 0, 0, 5, 0)}
-shapes = {love.physics.newRectangleShape(bodies[1], 0, 0, player.image:getHeight(), player.image:getWidth(), 0)}
+shapes = {love.physics.newRectangleShape(bodies[1], 0, 0, player.width, player.height, 0)}
 
 function love.update(dt)
 	map.world:update(dt)
 	player.image:update(dt)
+	player.image.img:setFilter("nearest", "nearest")
 	
 	player.move.x, player.move.y = bodies[1]:getLinearVelocity()
 	player.x, player.y = bodies[1]:getPosition()
@@ -96,7 +97,7 @@ end
 function love.draw()	
 	player:draw(camera:getX(),
 	            camera:getY(),
-	            camera:getRotation(), camera:getScaleX(), camera:getScaleY(), 9.5, 13)
+	            camera:getRotation(), camera:getScaleX(), camera:getScaleY(), player.width, player.height)
 	map:draw(camera:getX(), camera:getY(), camera:getRotation(), camera:getScaleX(), camera:getScaleY(), 0, 0)
 	
 	love.graphics.setBackgroundColor(80,120,200)
