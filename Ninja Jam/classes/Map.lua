@@ -70,9 +70,22 @@ function Map:draw(x, y, angle, sx, sy, ox, oy, ...)
 			layer = i
 		end
 		for i, tile in ipairs(self.tiles[layer]) do
-			tile:draw((tile:getX() * sx) + x,
-			          (tile:getY() * sy) + y,
-			          angle, sx, sy, ox, oy)
+			
+			-- rotation: x=x*cos(r) - y*sin(r), y=x*sin(r) + y*cos(r) 
+			final_x = ( (tile:getX() * math.cos(angle)) -
+			            (tile:getY() * math.sin(angle)) )
+			final_y = ( (tile:getX() * math.sin(angle)) +
+			            (tile:getY() * math.cos(angle)) )
+			
+			-- scale
+			final_x = final_x * sx
+			final_y = final_y * sy
+			
+			-- position offset
+			final_x = final_x + x
+			final_y = final_y + y
+			
+			tile:draw(final_x, final_y, angle, sx, sy, ox, oy)
 		end
 	end
 end

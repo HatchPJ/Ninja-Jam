@@ -52,6 +52,6 @@ end
 function Camera:getScaleY(v)
 	return self.scale_y
 end
-function Camera:getRotation(v)
-	return self.rotation(v)
+function Camera:getRotation()
+	return self.rotation
 end

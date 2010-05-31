@@ -11,7 +11,7 @@ SCREEN_HEIGHT = 480
 love.graphics.setMode(SCREEN_WIDTH, SCREEN_HEIGHT, false, true, 0)
 
 map = Map:new(8, 8, layers)
-camera = Camera:new(0, 0, 0, 2, 2)
+camera = Camera:new(0, 0, 0, 1, 1)
 
 
 bodies = {love.physics.newBody(map.world, 0, 0, 5, 0)}
@@ -68,6 +68,15 @@ function love.update(dt)
 		camera:setScaleX(camera:getScaleX() - .01)
 		camera:setScaleY(camera:getScaleY() - .01)
 	end
+
+	if love.keyboard.isDown("c") then
+		camera:setRotation(camera:getRotation() + .01)
+	end
+	
+	if love.keyboard.isDown("v") then
+		camera:setRotation(camera:getRotation() - .01)
+	end
+
 end
 
 function love.keypressed(k)
@@ -76,11 +85,11 @@ function love.keypressed(k)
 	end
 end
 
-function love.draw()
-	player.image:draw((bodies[1]:getX() * camera:getScaleX()) + camera:getX(),
-	                  (bodies[1]:getY() * camera:getScaleY()) + camera:getY(),
-	                  0, camera:getScaleX(), camera:getScaleY(), 9.5, 13)
-	map:draw(camera:getX(), camera:getY(), 0, camera:getScaleX(), camera:getScaleY(), 0, 0)
+function love.draw()	
+	player:draw(camera:getX(),
+	            camera:getY(),
+	            camera:getRotation(), camera:getScaleX(), camera:getScaleY(), 9.5, 13)
+	map:draw(camera:getX(), camera:getY(), camera:getRotation(), camera:getScaleX(), camera:getScaleY(), 0, 0)
 	
 	love.graphics.setBackgroundColor(80,120,200)
 end

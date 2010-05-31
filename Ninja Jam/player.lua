@@ -20,3 +20,22 @@ player.speed = 200
 player.jump = 30
 player.grav = 0
 player.inair = false
+
+function player:draw(x, y, angle, sx, sy, ox, oy)
+	
+	-- rotation: x=x*cos(r) - y*sin(r), y=x*sin(r) + y*cos(r) 
+	final_x = ( (player.x * math.cos(angle)) -
+				(player.y * math.sin(angle)) )
+	final_y = ( (player.x * math.sin(angle)) +
+				(player.y * math.cos(angle)) )
+	
+	-- scale
+	final_x = final_x * sx
+	final_y = final_y * sy
+	
+	-- position offset
+	final_x = final_x + x
+	final_y = final_y + y
+	
+	player.image:draw(final_x, final_y, angle, sx, sy, ox, oy)
+end
