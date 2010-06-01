@@ -5,7 +5,7 @@ Actor.speed  = nil
 Actor.health = nil
 
 function Actor:new()
-	actor = Entity:new()
+	actor = Entity
 	setmetatable(actor, self)
 	self.__index = self
 	

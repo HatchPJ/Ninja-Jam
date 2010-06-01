@@ -11,14 +11,6 @@ Entity.body   = nil
 Entity.shape  = nil
 Entity.world  = nil
 
-function Entity:new()
-	entity = {}
-	setmetatable(entity, self)
-	self.__index = self
-	
-	return entity
-end
-
 function Entity:draw(x, y, angle, sx, sy, ox, oy)
 	-- rotation: x=x*cos(r) - y*sin(r), y=x*sin(r) + y*cos(r) 
 	local final_x = ( (self.x * math.cos(angle)) -
@@ -37,8 +29,8 @@ function Entity:draw(x, y, angle, sx, sy, ox, oy)
 	self.anim:draw(final_x, final_y, angle, sx, sy, ox, oy)
 end
 
-function Entity:addAnim(file, fw, fh, delay, frames, title)
-	local image = love.graphics:newImage(file)
+function Entity:addAnim(title, file, fw, fh, delay, frames)
+	local image = love.graphics.newImage(file)
 	image:setFilter("nearest", "nearest")
 	self.anims[title] = newAnimation(image, fw, fh, delay, frames)
 end

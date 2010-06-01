@@ -13,22 +13,20 @@ love.graphics.setMode(SCREEN_WIDTH, SCREEN_HEIGHT, false, true, 0)
 map = Map:new(8, 8, layers)
 camera = Camera:new(0, 0, 0, 1, 1)
 
-
-bodies = {love.physics.newBody(map.world, 0, 0, 5, 0)}
-shapes = {love.physics.newRectangleShape(bodies[1], 0, 0, player.width, player.height, 0)}
+player.body = love.physics.newBody(map.world, 0, 0, 5, 0)
+player.shape = love.physics.newRectangleShape(player.body, 0, 0, player.width, player.height, 0)
 
 function love.update(dt)
 	map.world:update(dt)
-	player.image:update(dt)
-	player.image.img:setFilter("nearest", "nearest")
+	player.anim:update(dt)
 	
-	player.move.x, player.move.y = bodies[1]:getLinearVelocity()
-	player.x, player.y = bodies[1]:getPosition()
+	player.move.x, player.move.y = player.body:getLinearVelocity()
+	player.x, player.y = player.body:getPosition()
 	
 	camerax = -( (player.x * math.cos(camera:getRotation())) -
-				(player.y * math.sin(camera:getRotation())) )
+	             (player.y * math.sin(camera:getRotation())) )
 	cameray = -( (player.x * math.sin(camera:getRotation())) +
-				(player.y * math.cos(camera:getRotation())) )
+	             (player.y * math.cos(camera:getRotation())) )
 	
 	camerax = camerax * camera:getScaleX()
 	cameray = cameray * camera:getScaleY()
@@ -36,36 +34,36 @@ function love.update(dt)
 	camera:setX(camerax + SCREEN_WIDTH/2)
 	camera:setY(cameray + SCREEN_HEIGHT/2)
 	
-	if player.move.x < 10 and player.move.x > -10 then
-		if player.image == player.left_anim then
-			player.image = player.stationary_left_anim
-		elseif player.image == player.right_anim then
-			player.image = player.stationary_right_anim
+	if player.move.x < 50 and player.move.x > -50 then
+		if player.anim == player.anims["run left"] then
+			player:setAnim("idle left")
+		elseif player.anim == player.anims["run right"] then
+			player:setAnim("idle right")
 		end
 	end
 	
 	if love.keyboard.isDown("right") or love.keyboard.isDown("d") then
 		if player.inair == false then
-			bodies[1]:applyForce(player.speed, 0)
+			player.body:applyForce(player.speed, 0)
 		elseif player.inair == true then
-			bodies[1]:applyForce(player.speed/3, 0)
+			player.body:applyForce(player.speed/3, 0)
 		end
 		if player.move.x >= player.speed then
-			bodies[1]:setLinearVelocity(player.speed, player.move.y)
+			player.body:setLinearVelocity(player.speed, player.move.y)
 		end
-		player.image = player.right_anim
+		player:setAnim("run right")
 	end
 	
 	if love.keyboard.isDown("left")  or love.keyboard.isDown("a") then
 		if player.inair == false then
-			bodies[1]:applyForce(-player.speed, 0)
+			player.body:applyForce(-player.speed, 0)
 		elseif player.inair == true then
-			bodies[1]:applyForce(-player.speed/3, 0)
+			player.body:applyForce(-player.speed/3, 0)
 		end
 		if player.move.x <= -player.speed then
-			bodies[1]:setLinearVelocity(-player.speed, player.move.y)
+			player.body:setLinearVelocity(-player.speed, player.move.y)
 		end
-		player.image = player.left_anim
+		player:setAnim("run left")
 	end
 	
 	if love.keyboard.isDown("z") then
@@ -90,7 +88,7 @@ end
 
 function love.keypressed(k)
 	if (k == " " or k == "w" or k == "up") and not player.inair then
-		bodies[1]:applyImpulse(0, -player.jump)
+		player.body:applyImpulse(0, -player.jump)
 	end
 end
 

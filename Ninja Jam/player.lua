@@ -1,15 +1,13 @@
-player = { }
-player.left_image  = love.graphics.newImage("images/player/playerl.gif")
-player.right_image = love.graphics.newImage("images/player/playerr.gif")
+require("classes/Actor.lua")
 
-player.left_anim_image  = love.graphics.newImage("images/player/runl.gif")
-player.right_anim_image = love.graphics.newImage("images/player/runr.gif")
-player.stationary_left_anim  = newAnimation(player.left_image,  32, 32, 0.1, 0)
-player.stationary_right_anim = newAnimation(player.right_image, 32, 32, 0.1, 0)
-player.left_anim  = newAnimation(player.left_anim_image, 32, 32, 0.1, 0)
-player.right_anim = newAnimation(player.right_anim_image, 32, 32, 0.1, 0)
+player = Actor:new()
 
-player.image = player.stationary_right_anim
+player:addAnim("idle left",  "images/player/playerl.gif", 32,32,0.1,0)
+player:addAnim("idle right", "images/player/playerr.gif", 32,32,0.1,0)
+player:addAnim("run left",   "images/player/runl.gif",    32,32,0.1,0)
+player:addAnim("run right",  "images/player/runr.gif",    32,32,0.1,0)
+
+player:setAnim("idle left")
 
 player.x = 0
 player.y = 0
@@ -23,6 +21,7 @@ player.jump = 30
 player.grav = 0
 player.inair = false
 
+--[[
 function player:draw(x, y, angle, sx, sy, ox, oy)
 	
 	-- rotation: x=x*cos(r) - y*sin(r), y=x*sin(r) + y*cos(r) 
@@ -41,3 +40,4 @@ function player:draw(x, y, angle, sx, sy, ox, oy)
 	
 	player.image:draw(final_x, final_y, angle, sx, sy, ox, oy)
 end
+--]]
